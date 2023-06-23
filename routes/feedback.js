@@ -1,4 +1,4 @@
 const express = require('express');
-const feedback = require('../models/feedback');
-const speak = require('../models/speak');
-const feedback = require('../models/feedback');
+const feedback = require('../schemas/feedback');
+const speak = require('../schemas/speak');
+const feedback = require('../schemas/feedback');

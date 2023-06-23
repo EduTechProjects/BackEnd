@@ -11,6 +11,8 @@ const connect = require('/schemas');
 const indexRouter = require('./routes/index');
 const speakRouter = require('./routes/speak');
 const feedbackRouter = require('./routes/feedback');
+const homeRouter = require('./routes/home');
+const subjectRouter = require('./routes/subject');
 
 dotenv.config();
 
@@ -19,6 +21,8 @@ dotenv.config();
 app.use('/', indexRouter);
 app.use('/speak', speakRouter);
 app.use('/feedback', feedbackRouter);
+app.use('/home', homeRouter);
+app.use('/subject', subjectRouter);
 
 
 const app = express();
@@ -44,6 +48,10 @@ app.use(session({
         secure : false,
     }
 }));
+
+//body-parser 미들웨어 설정
+app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.json());
 
 
 //404 에러 처리 미들웨어
