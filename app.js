@@ -7,10 +7,18 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const multer = require('multer');
 const dotenv = require('dotenv');
-
+const connect = require('/schemas');
+const indexRouter = require('./routes/index');
+const speakRouter = require('./routes/speak');
+const feedbackRouter = require('./routes/feedback');
 
 dotenv.config();
+
 // Router
+
+app.use('/', indexRouter);
+app.use('/speak', speakRouter);
+app.use('/feedback', feedbackRouter);
 
 
 const app = express();
@@ -27,6 +35,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(session({
+    resave : false,
+    saveUninitialized : false,
+    secret : process.env.COOKIE_SECRET,
+    cookie : {
+        httpOnly : true,
+        secure : false,
+    }
+}));
 
 
 //404 에러 처리 미들웨어
@@ -55,13 +72,34 @@ app.listen(app.get('port' ,()=>{
      console.log('${port} 포트입니다.')
 }))
 
-// 몽구스 연결
-var db= mongoose.connection;
-db.on('error', console.error);
-db.once('open', function(){
-    //Mongodb 서버에 연결하기
-    console.log("Mongo Db 연결에 성공하였음!🐤")
-});
+//몽구스 연결
+const connect =()=>{
+    if (process.env.NODE_ENV !== 'production'){ //개발 모드일때는 debug모드를 사용한다.
+        mongoose.set('debug', true);
+    }
+    mongoose.connect('mongodb://url', {
+       dbName : 'nodejs',
+       useNewUrlParser : true,
+       useCreateIndex : true,
+    } , (error) =>{
+       if (error) {
+          console.log('몽고디비 연결 에러', error);
+       } else {
+          console.log('몽고디비 연결 성공');
+       }
+    });
+ };
+ 
+ mongoose.connection.on('error' ,(error)=>{
+    console.error('몽고디비 연결 에러', error);
+ })
+ mongoose.connection.on('disconnected' ,()=>{
+    conosle.error('몽고디비 연결이 끊겼슘니당. 연결 재시도 하겠습니다.');
+    connect();
+ })
+ module.exports = connect;
+ 
 
-mongoose.connect('mongodb://localhost:27017')
+
+
 
