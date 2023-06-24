@@ -45,6 +45,8 @@ const app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('viw engine', 'html');
 
+
+
 if( process.env.NODE_ENV === 'production') {
     sessionOption.proxy = true;
     app.enable('trust proxy');
@@ -70,7 +72,7 @@ const sessionOption = {
         httpOnly : true,
         secure : false,
     }, 
-    store : 
+    store : new RedisStore({client : redisClient}),
 }
 
 //body-parser 미들웨어 설정
@@ -125,6 +127,7 @@ const connect =()=>{
     });
  };
  
+
  mongoose.connection.on('error' ,(error)=>{
     console.error('몽고디비 연결 에러', error);
  })
