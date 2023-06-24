@@ -1,4 +1,4 @@
-FROM node:14-alpline
+FROM node:20.3-alpine3.17
 
 #명령 실행을 위한 디렉토리 설정 
 WORKDIR /the/workdir/path
