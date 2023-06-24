@@ -5,7 +5,11 @@ const {Schema}  = mongoose;
 const feedbackSchema = new Schema({
     feedback : {
         type : 'String',
-        require : 'true',
+        required : 'true',
+    },
+    answer : {
+        type : 'String',
+        required : 'true',
     }
    
 })

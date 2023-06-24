@@ -13,6 +13,10 @@ const speakRouter = require('./routes/speak');
 const feedbackRouter = require('./routes/feedback');
 const homeRouter = require('./routes/home');
 const subjectRouter = require('./routes/subject');
+const hpp = require('hpp');
+const helmet = require('helmet');
+const csurf = requrie('csurf');
+
 
 dotenv.config();
 
@@ -32,10 +36,18 @@ const app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('viw engine', 'html');
 
+if( process.env.NODE_ENV === 'production') {
+    app.enable('trust proxy');
+    app.use(morgan('dombined'));
+    app.use(helmet({contentSecurityPolicy : false}));
+    app.use(hpp());
+} else {
+    app.use(morgan('div'));
+}
 
 //미들웨어 설정 
-app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/upload', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(cookieParser(process.env.COOKIE_SECRET));
