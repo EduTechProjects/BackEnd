@@ -45,8 +45,19 @@ router.post("/upload-audio", upload.single("audio"), async (req, res) => {
 
             const response = await axios.post('/upload-audio', formData, {
                 headers : formData.getHeaders(),
-            })
+            });
+
+            response.push(response.data);
         }
+        //response 배열에는 각 응답 결과가 들어있음
+        console.log(responses);
+
+        response.sendStatus(200);
+    } catch(error) {
+      console.error('오류가 발생했습니다.', error);
+      res.status(500).json({
+        error : '오류가 발생했습니다.'
+      });
     }
   })
 

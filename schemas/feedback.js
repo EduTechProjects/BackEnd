@@ -7,7 +7,7 @@ const feedbackSchema = new Schema({
         type : 'String',
         required : 'true',
     },
-    answer : {
+    answer_text: {
         type : 'String',
         required : 'true',
     }

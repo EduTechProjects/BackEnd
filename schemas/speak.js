@@ -6,8 +6,8 @@ const speakscheama = new Schema({
     type : String,
     required : true,
    },
-   answer : {
-    type : String,
+   answer_speak : {
+    type : Buffer,
     required : true,
    }
 })
